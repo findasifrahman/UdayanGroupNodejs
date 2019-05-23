@@ -7,7 +7,7 @@ var blogrouter = require('./api/blogapi');
 var commentapi = require('./api/commentapi');
 var productgroup = require('./api/productgroupapi');
 var products = require('./api/productsapi');
-
+var fileupload = require('./api/fileupload');
 //var cors = require('cors');
 //app.use(cors);
 
@@ -18,6 +18,7 @@ app.use('/api/blog',blogrouter);
 app.use('/api/comment',commentapi);
 app.use('/api/productgroup',productgroup);
 app.use('/api/product',products);
+app.use('/picture/upload',fileupload);
 //CORS middleware
 /*var allowCrossDomain = function(req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
@@ -38,6 +39,8 @@ app.use(function (req, res, next) {
     res.status(500).send('SORRY!! wrong UPL');
 });
 
+
 app.listen(8086,function(){
+    //console.log(path.join(__dirname,'uploads'));
     console.log("listening to port 8086");
 })
