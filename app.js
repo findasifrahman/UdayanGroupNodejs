@@ -6,6 +6,7 @@ var dbcontext = require('./dbcontext');
 var blogrouter = require('./api/blogapi');
 var commentapi = require('./api/commentapi');
 var productgroup = require('./api/productgroupapi');
+var products = require('./api/productsapi');
 
 //var cors = require('cors');
 //app.use(cors);
@@ -16,6 +17,7 @@ app.use(bodyparser.urlencoded({extended: true}));
 app.use('/api/blog',blogrouter);
 app.use('/api/comment',commentapi);
 app.use('/api/productgroup',productgroup);
+app.use('/api/product',products);
 //CORS middleware
 /*var allowCrossDomain = function(req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");

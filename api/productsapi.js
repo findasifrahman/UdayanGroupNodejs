@@ -2,34 +2,33 @@ var app = require('express')();
 
 var cors = require('cors');
 app.use(cors());
-var productgroupmodel = require('../models/productgroup');
-
+var productmodel = require('../models/productmodels');
 
 app.get("/",function(req,res,next){
-    productgroupmodel.findAll().then(result => {
+    productmodel.findAll().then(result => {
            res.json(result)
            //console.log(result)
-       })
-       .catch(err  => {next(err);console.log(err)});   
+       }).catch(err  => {next(err);console.log(err)});   
 })
 app.get("/getbyid",function(req,res,next){
     console.log(req.query.id);
-    productgroupmodel.findOne({
+    productmodel.findOne({
         where: {
            Id: req.query.id
         }
      }).then(result => {
            res.json(result)
            //console.log(result)
-       })
-       .catch(err  => {next(err);console.log(err)});   
+       }).catch(err  => {next(err);console.log(err)});   
 })
 app.post('/', function(req, res,next){
     console.log("inside add");
     console.log(req.body);
-    let { groupname } = req.body;
-    productgroupmodel.create({
-        groupname,
+    let { productname,producttitle,productgroup,productmeta,productseo,description,offer,otherinfo,
+        price,image1,image2,image3,image4 } = req.body;
+    productmodel.create({
+        productname,producttitle,productgroup,productmeta,productseo,description,offer,otherinfo,
+        price,image1,image2,image3,image4
     }
     ).then(result => res.status(200).send(result))
     .catch(err => {next(err);console.log(err);});
@@ -38,10 +37,12 @@ app.put('/', function(req, res,next){
     console.log("inside update");
     console.log(req.body.Id);
 
-    let { Id,groupname } = req.body;
+    let { Id,producttitle,productgroup,productmeta,productseo,description,offer,otherinfo,
+        price,image1,image2,image3,image4 } = req.body;
       // Insert into table
-      productgroupmodel.update({
-        groupname
+      productmodel.update({
+        producttitle,productgroup,productmeta,productseo,description,offer,otherinfo,
+        price,image1,image2,image3,image4
       },{ where: { Id: req.body.Id } })
         .then(result => res.status(200).send(result))
         .catch(err => {next(err);console.log(err)});
@@ -52,10 +53,10 @@ app.delete('/', (req, res,next) => {
         where: { Id: req.query.id }         
     }).then(result => res.status(200).send({"ok":"ok"}))
     .catch(err => {next(err);console.log(err)});*/
-    productgroupmodel.destroy({
+    productmodel.destroy({
         where: { Id: req.query.id }         
     }).then(result => {
-        productgroupmodel.findAll().then(result => {
+        productmodel.findAll().then(result => {
             res.json(result)
             //console.log(result)
         })
