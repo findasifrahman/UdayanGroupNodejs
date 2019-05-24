@@ -36,12 +36,13 @@ app.post('/', function(req, res,next){
 app.put('/', function(req, res,next){
     console.log("inside update");
     console.log(req.body.Id);
+    console.log(req.body);
 
-    let { Id,producttitle,productgroup,productmeta,productseo,description,offer,otherinfo,
+    let { Id,productname,producttitle,productgroup,productmeta,productseo,description,offer,otherinfo,
         price,image1,image2,image3,image4 } = req.body;
       // Insert into table
       productmodel.update({
-        producttitle,productgroup,productmeta,productseo,description,offer,otherinfo,
+        productname,producttitle,productgroup,productmeta,productseo,description,offer,otherinfo,
         price,image1,image2,image3,image4
       },{ where: { Id: req.body.Id } })
         .then(result => res.status(200).send(result))

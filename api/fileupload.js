@@ -1,26 +1,46 @@
 var app = require('express')();
 var cors = require('cors');
-app.use(cors());
-
+//app.use(cors());
+app.use(cors({credentials: true, origin: 'http://localhost:4200'}));
 var formidable = require('formidable');
 var fs = require('fs');
 var path = require('path');
 
 
-app.post('/', function(req, res,next){
-    console.log("inside upload");
-
+app.post('/upload', function(req, res){
+    console.log(req.query.picid);
+    const picid = req.query.picid;
+   
     var form = new formidable.IncomingForm();
-    form.parse(req, function (err, fields, files) {
-      var oldpath = files.filetoupload.path;
-      var newpath = console.log(path.join(__dirname,'uploads')) + files.filetoupload.name;
-      fs.rename(oldpath, newpath, function (err) {
-        if (err) throw err;
-        res.write('File uploaded and moved!');
-        res.end();
-      })
+
+    form.parse(req);
+
+    form.on('fileBegin', function (name, file){
+      const ext =  path.extname(file.name);
+        file.path = __dirname + '/uploads/' +  picid + ext;//file.name;
+    });
+
+    form.on('file', function (name, file){
+        const ext =  path.extname(file.name);
+        console.log('Uploaded ' + file.name);
+        return res.json({ success: true,fileid: picid + ext,full: __dirname + '/uploads/' + picid + ext,fullpdf: "/images/pdficon.png", error : ""});          
+    });
+    form.on('error', (err) => {
+      console.log('ParsingError');
+      return res.sendStatus(400);
     })
-
+    //return res.json({ success : false, fileid : "failed", error :"something went wrong" });
+           
 })
+app.get('/delete', function(req, res){
+  console.log("inside file delete");
+  const sp = __dirname + '/uploads/';
+  console.log(path.join(sp,req.query.picid));
 
+  fs.unlink(path.join(sp,req.query.picid),function(err){
+    if(err) return res.status(400).send({message: 'This is an error!'}); 
+    return res.json({ success : true, fileid : sp + req.query.picid, name : req.query.picid, error : "" });
+  });
+  //return res.json({ success : true, fileid : sp + req.query.picid, name : req.query.picid, error : "" });
+})
 module.exports = app;

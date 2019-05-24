@@ -18,7 +18,7 @@ app.use('/api/blog',blogrouter);
 app.use('/api/comment',commentapi);
 app.use('/api/productgroup',productgroup);
 app.use('/api/product',products);
-app.use('/picture/upload',fileupload);
+app.use('/picture',fileupload);
 //CORS middleware
 /*var allowCrossDomain = function(req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
@@ -28,16 +28,16 @@ app.use('/picture/upload',fileupload);
     next();
 }*/
 //app.use(allowCrossDomain);
-
+app.use('/api/uploads',express.static(__dirname + '/api/uploads'));
 app.use(function (err, req, res, next) {
     console.error(err.stack);
     res.status(500).send('Something went wrong!!');
 });
 
-app.use(function (req, res, next) {
+/*app.use(function (req, res, next) {
 //console.error(err.stack); 404
     res.status(500).send('SORRY!! wrong UPL');
-});
+});*/
 
 
 app.listen(8086,function(){
