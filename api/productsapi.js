@@ -21,6 +21,17 @@ app.get("/getbyid",function(req,res,next){
            //console.log(result)
        }).catch(err  => {next(err);console.log(err)});   
 })
+app.get("/getbygroup",function(req,res,next){
+    console.log(req.query.group);
+    productmodel.findAll({
+        where: {
+           productgroup: req.query.group
+        }
+     }).then(result => {
+           res.json(result)
+           //console.log(result)
+       }).catch(err  => {next(err);console.log(err)});   
+})
 app.post('/', function(req, res,next){
     console.log("inside add");
     console.log(req.body);
