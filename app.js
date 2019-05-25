@@ -8,6 +8,7 @@ var commentapi = require('./api/commentapi');
 var productgroup = require('./api/productgroupapi');
 var products = require('./api/productsapi');
 var fileupload = require('./api/fileupload');
+var login = require('./api/login');
 //var cors = require('cors');
 //app.use(cors);
 
@@ -19,6 +20,7 @@ app.use('/api/comment',commentapi);
 app.use('/api/productgroup',productgroup);
 app.use('/api/product',products);
 app.use('/picture',fileupload);
+app.use('/api/login',login);
 //CORS middleware
 /*var allowCrossDomain = function(req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
