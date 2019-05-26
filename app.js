@@ -9,8 +9,7 @@ var productgroup = require('./api/productgroupapi');
 var products = require('./api/productsapi');
 var fileupload = require('./api/fileupload');
 var login = require('./api/login');
-//var cors = require('cors');
-//app.use(cors);
+
 
 
 app.use(bodyparser.json());

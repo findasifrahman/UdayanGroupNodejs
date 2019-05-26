@@ -1,5 +1,5 @@
 var app = require('express')();
-
+var validatetoken = require('./login').validateToken;
 var cors = require('cors');
 app.use(cors());
 var productgroupmodel = require('../models/productgroup');
@@ -12,7 +12,7 @@ app.get("/",function(req,res,next){
        })
        .catch(err  => {next(err);console.log(err)});   
 })
-app.get("/getbyid",function(req,res,next){
+app.get("/getbyid",validatetoken,function(req,res,next){
     console.log(req.query.id);
     productgroupmodel.findOne({
         where: {
@@ -24,7 +24,7 @@ app.get("/getbyid",function(req,res,next){
        })
        .catch(err  => {next(err);console.log(err)});   
 })
-app.post('/', function(req, res,next){
+app.post('/',validatetoken, function(req, res,next){
     console.log("inside add");
     console.log(req.body);
     let { groupname } = req.body;
@@ -34,7 +34,7 @@ app.post('/', function(req, res,next){
     ).then(result => res.status(200).send(result))
     .catch(err => {next(err);console.log(err);});
 })
-app.put('/', function(req, res,next){
+app.put('/',validatetoken, function(req, res,next){
     console.log("inside update");
     console.log(req.body.Id);
 
@@ -46,7 +46,7 @@ app.put('/', function(req, res,next){
         .then(result => res.status(200).send(result))
         .catch(err => {next(err);console.log(err)});
 })
-app.delete('/', (req, res,next) => {
+app.delete('/',validatetoken, (req, res,next) => {
     console.log("inside delete");
     /*productgroupmodel.destroy({
         where: { Id: req.query.id }         
