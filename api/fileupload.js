@@ -1,7 +1,7 @@
 var app = require('express')();
 var cors = require('cors');
 //app.use(cors());
-app.use(cors({credentials: true, origin: 'http://103.218.25.96:4200'}));
+app.use(cors({credentials: true, origin: 'http://localhost:4200'}));
 var formidable = require('formidable');
 var fs = require('fs');
 var path = require('path');
