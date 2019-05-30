@@ -3,26 +3,27 @@ var validatetoken = require('./login').validateToken;
 var cors = require('cors');
 app.use(cors());
 var productgroupmodel = require('../models/productgroup');
+var productmodels = require('../models/productmodels');
 
 
 app.get("/",function(req,res,next){
-    productgroupmodel.findAll().then(result => {
+    productgroupmodel.findAll({include: [productgroupmodel.products]}).then(result => {
            res.json(result)
            //console.log(result)
        })
-       .catch(err  => {next(err);console.log(err)});   
+       .catch(err  => { res.status(400).send(err);console.log(err)});   
 })
 app.get("/getbyid",validatetoken,function(req,res,next){
     console.log(req.query.id);
     productgroupmodel.findOne({
         where: {
-           Id: req.query.id
+           id: req.query.id
         }
      }).then(result => {
            res.json(result)
            //console.log(result)
        })
-       .catch(err  => {next(err);console.log(err)});   
+       .catch(err  => {res.status(400).send(err);;console.log(err)});   
 })
 app.post('/',validatetoken, function(req, res,next){
     console.log("inside add");
@@ -32,19 +33,19 @@ app.post('/',validatetoken, function(req, res,next){
         groupname,
     }
     ).then(result => res.status(200).send(result))
-    .catch(err => {next(err);console.log(err);});
+    .catch(err => {res.status(400).send(err);console.log(err);});
 })
 app.put('/',validatetoken, function(req, res,next){
     console.log("inside update");
     console.log(req.body.Id);
 
-    let { Id,groupname } = req.body;
+    let { id,groupname } = req.body;
       // Insert into table
       productgroupmodel.update({
         groupname
-      },{ where: { Id: req.body.Id } })
+      },{ where: { id: req.body.Id } })
         .then(result => res.status(200).send(result))
-        .catch(err => {next(err);console.log(err)});
+        .catch(err => {res.status(400).send(err);console.log(err)});
 })
 app.delete('/',validatetoken, (req, res,next) => {
     console.log("inside delete");
@@ -53,15 +54,15 @@ app.delete('/',validatetoken, (req, res,next) => {
     }).then(result => res.status(200).send({"ok":"ok"}))
     .catch(err => {next(err);console.log(err)});*/
     productgroupmodel.destroy({
-        where: { Id: req.query.id }         
+        where: { id: req.query.id }         
     }).then(result => {
         productgroupmodel.findAll().then(result => {
             res.json(result)
             //console.log(result)
         })
-        .catch(err  => {next(err);console.log(err)}); 
+        .catch(err  => {res.status(400).send(err);console.log(err)}); 
     })
-    .catch(err => {next(err);console.log(err)});
+    .catch(err => {res.status(400).send(err);console.log(err)});
 });
 
 module.exports = app;

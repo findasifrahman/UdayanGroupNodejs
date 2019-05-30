@@ -3,7 +3,7 @@ const dbcontext = require('../dbcontext');
 
 const products = dbcontext.define('products', {
     // attributes
-    Id: {
+    id: {
         type:Sequelize.INTEGER,
         primaryKey: true,
         autoIncrement: true
@@ -16,8 +16,8 @@ const products = dbcontext.define('products', {
         type: Sequelize.STRING,
         allowNull: false,
     },
-    productgroup:{
-        type: Sequelize.STRING,
+    productgroupId:{
+        type: Sequelize.INTEGER,
         allowNull: false,
     },
     productmeta:{

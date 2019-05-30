@@ -9,73 +9,70 @@ app.get("/",function(req,res,next){
     productmodel.findAll().then(result => {
            res.json(result)
            //console.log(result)
-       }).catch(err  => {next(err);console.log(err)});   
+       }).catch(err  => {res.status(400).send(err);console.log(err)});   
 })
 app.get("/getbyid",validatetoken,function(req,res,next){
     console.log(req.query.id);
     productmodel.findOne({
         where: {
-           Id: req.query.id
+           id: req.query.id
         }
      }).then(result => {
            res.json(result)
            //console.log(result)
-       }).catch(err  => {next(err);console.log(err)});   
+       }).catch(err  => {res.status(400).send(err);console.log(err)});   
 })
 app.get("/getbygroup",function(req,res,next){
     console.log(req.query.group);
     productmodel.findAll({
         where: {
-           productgroup: req.query.group
+            productgroupId: req.query.group
         }
      }).then(result => {
            res.json(result)
            //console.log(result)
-       }).catch(err  => {next(err);console.log(err)});   
+       }).catch(err  => {console.log(err);res.status(400).send(err)});   
 })
 app.post('/',validatetoken, function(req, res,next){
     console.log("inside add");
     console.log(req.body);
-    let { productname,producttitle,productgroup,productmeta,productseo,description,offer,otherinfo,
+    let { productname,producttitle,productgroupId,productmeta,productseo,description,offer,otherinfo,
         price,image1,image2,image3,image4 } = req.body;
     productmodel.create({
-        productname,producttitle,productgroup,productmeta,productseo,description,offer,otherinfo,
+        productname,producttitle,productgroupId,productmeta,productseo,description,offer,otherinfo,
         price,image1,image2,image3,image4
     }
     ).then(result => res.status(200).send(result))
-    .catch(err => {next(err);console.log(err);});
+    .catch(err => {res.status(400).send(err);console.log(err);});
 })
 app.put('/',validatetoken, function(req, res,next){
     console.log("inside update");
     console.log(req.body.Id);
     console.log(req.body);
 
-    let { Id,productname,producttitle,productgroup,productmeta,productseo,description,offer,otherinfo,
+    let { id,productname,producttitle,productgroupId,productmeta,productseo,description,offer,otherinfo,
         price,image1,image2,image3,image4 } = req.body;
       // Insert into table
       productmodel.update({
-        productname,producttitle,productgroup,productmeta,productseo,description,offer,otherinfo,
+        productname,producttitle,productgroupId,productmeta,productseo,description,offer,otherinfo,
         price,image1,image2,image3,image4
-      },{ where: { Id: req.body.Id } })
+      },{ where: { id: req.body.Id } })
         .then(result => res.status(200).send(result))
-        .catch(err => {next(err);console.log(err)});
+        .catch(err => {res.status(400).send(err);console.log(err)});
 })
 app.delete('/',validatetoken, (req, res,next) => {
     console.log("inside delete");
-    /*productgroupmodel.destroy({
-        where: { Id: req.query.id }         
-    }).then(result => res.status(200).send({"ok":"ok"}))
-    .catch(err => {next(err);console.log(err)});*/
+
     productmodel.destroy({
-        where: { Id: req.query.id }         
+        where: { id: req.query.id }         
     }).then(result => {
         productmodel.findAll().then(result => {
             res.json(result)
             //console.log(result)
         })
-        .catch(err  => {next(err);console.log(err)}); 
+        .catch(err  => {res.status(400).send(err);;console.log(err)}); 
     })
-    .catch(err => {next(err);console.log(err)});
+    .catch(err => {res.status(400).send(err);console.log(err)});
 });
 
 module.exports = app;

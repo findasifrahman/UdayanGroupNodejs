@@ -1,9 +1,9 @@
 const Sequelize = require('sequelize');
 const dbcontext = require('../dbcontext');
-
+const products = require('./productmodels');
 const productgroup = dbcontext.define('productgroup', {
     // attributes
-    Id: {
+    id: {
         type:Sequelize.INTEGER,
         primaryKey: true,
         autoIncrement: true
@@ -16,5 +16,7 @@ const productgroup = dbcontext.define('productgroup', {
     // options
   }
 );
+productgroup.products = productgroup.hasMany(products, { onDelete: 'CASCADE' });//, {foreignKey: 'postId', sourceKey: 'Id'});
+products.belongsTo(productgroup, { onDelete: 'CASCADE' });//, {foreignKey: 'postId', targetKey: 'Id'});
 
 module.exports = productgroup;
