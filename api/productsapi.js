@@ -1,5 +1,5 @@
 var app = require('express')();
-var validatetoken = require('./login').validateToken;
+var validatetoken = require('./login').validateTokenAdmin;
 
 var cors = require('cors');
 app.use(cors());
@@ -11,7 +11,7 @@ app.get("/",function(req,res,next){
            //console.log(result)
        }).catch(err  => {res.status(400).send(err);console.log(err)});   
 })
-app.get("/getbyid",validatetoken,function(req,res,next){
+app.get("/getbyid",function(req,res,next){
     console.log(req.query.id);
     productmodel.findOne({
         where: {
@@ -70,9 +70,9 @@ app.delete('/',validatetoken, (req, res,next) => {
             res.json(result)
             //console.log(result)
         })
-        .catch(err  => {res.status(400).send(err);;console.log(err)}); 
+        .catch(err  => {res.status(400);console.log(err)}); 
     })
-    .catch(err => {res.status(400).send(err);console.log(err)});
+    .catch(err => {res.status(400);console.log(err)});
 });
 
 module.exports = app;

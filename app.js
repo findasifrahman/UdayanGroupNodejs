@@ -1,6 +1,7 @@
 var express = require("express");
 var app = express(); // express instance
-
+var passport = require('passport');
+var paeesortSetup = require('./config/passport-setup');
 var bodyparser = require("body-parser");
 var dbcontext = require('./dbcontext');
 var blogrouter = require('./api/blogapi');
@@ -9,17 +10,22 @@ var productgroup = require('./api/productgroupapi');
 var products = require('./api/productsapi');
 var fileupload = require('./api/fileupload');
 var login = require('./api/login');
-
+var oauthlogin = require('./api/oauthlogin');
 
 
 app.use(bodyparser.json());
 app.use(bodyparser.urlencoded({extended: true}));
+
+app.use(passport.initialize());
+app.use(passport.session());
+
 app.use('/api/blog',blogrouter);
 app.use('/api/comment',commentapi);
 app.use('/api/productgroup',productgroup);
 app.use('/api/product',products);
 app.use('/picture',fileupload);
 app.use('/api/login',login);
+app.use('/api/oauth',oauthlogin);
 //CORS middleware
 /*var allowCrossDomain = function(req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");

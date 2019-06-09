@@ -1,5 +1,5 @@
 var app = require('express')();
-var validatetoken = require('./login').validateToken;
+var validatetoken = require('./login').validateTokenAdmin;
 var cors = require('cors');
 app.use(cors());
 var productgroupmodel = require('../models/productgroup');
@@ -9,11 +9,11 @@ var productmodels = require('../models/productmodels');
 app.get("/",function(req,res,next){
     productgroupmodel.findAll({include: [productgroupmodel.products]}).then(result => {
            res.json(result)
-           //console.log(result)
+           console.log(result)
        })
        .catch(err  => { res.status(400).send(err);console.log(err)});   
 })
-app.get("/getbyid",validatetoken,function(req,res,next){
+app.get("/getbyid",function(req,res,next){
     console.log(req.query.id);
     productgroupmodel.findOne({
         where: {
